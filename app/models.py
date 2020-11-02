@@ -45,6 +45,10 @@ class Hotel(db.Model):
     location = db.Column(db.String(64))
     rooms_number = db.Column(db.Integer)
     reservation = db.relationship('Reservation', backref='hotel', lazy=True)
+    image1 = db.Column(db.String(256))
+    image2 = db.Column(db.String(256))
+    image3 = db.Column(db.String(256))
+    image4 = db.Column(db.String(256))
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key = True)
