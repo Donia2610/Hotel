@@ -69,3 +69,10 @@ def countries():
 
     return flask.render_template("countries.html",title ='Hotel Locations',hotel_locations = hotel_locations)
 
+@users.route("/reservations/<user_id>")
+def reservations(user_id):
+    user_reservations = Reservation.query.filter_by(user_id=user_id).all()
+    if not user_reservations:
+        flask.flash("No reservations found", category="error")
+    return flask.render_template("reservations.html",title ='Your Reservations',user_reservations = user_reservations)
+
