@@ -36,7 +36,7 @@ class User(UserMixin, db.Model): # SQL Table
         return werkzeug.security.check_password_hash(self._password_hash, pwd)
 
     def __repr__(self):
-        return f"<User {self.id}-{self.name}>"
+        return f"<User {self.id}-{self.username}>"
 
 
 class Hotel(db.Model):

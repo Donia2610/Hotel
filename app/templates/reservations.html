@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1> Your Reservations</h1>
+    {% for reservation in user_reservations %}
+    <br><br>
+
+    <h2> {{reservation['start_date'] }} </h2>
+    <h2> {{reservation['end_date'] }} </h2>
+
+    {% endfor %}
+{% endblock %}
