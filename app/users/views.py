@@ -13,6 +13,7 @@ admin.add_view(MyModelView(User,db.session))
 admin.add_view(MyModelView(Hotel,db.session))
 admin.add_view(MyModelView(Reservation,db.session))
 
+
 @users.route("/", methods=["GET", "POST"])
 @users.route("/home", methods=["GET", "POST"])
 def index():
@@ -64,6 +65,7 @@ def signout():
 
 @users.route("/locations")
 def countries():
+    hotel_locations = Hotel.query.all()
 
-    return flask.render_template("countries.html")
+    return flask.render_template("countries.html",title ='Hotel Locations',hotel_locations = hotel_locations)
 
