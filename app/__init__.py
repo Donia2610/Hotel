@@ -6,14 +6,17 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_admin import Admin
 
 db  = SQLAlchemy()
 migrate = Migrate()
 login_mgr = LoginManager()
+admin = Admin(template_mode='bootstrap4')
+
 
 def create_app():
-    from .blueprints.auth.models import User
-    from .blueprints import auth, main
+    from .models import User, Hotel, Reservation
+    from app.users.views import users
 
     env=os.environ.get("FLASK_ENV", "development")
     print("Using config", env)
@@ -21,12 +24,16 @@ def create_app():
     app = flask.Flask(__name__) # __name__ is the name of the folder
     app.config.from_object(config[env])
 
-    app.register_blueprint(auth.blueprint)
-    app.register_blueprint(main.blueprint)
+    app.register_blueprint(users)
+   
+
+
 
     db.init_app(app)
     migrate.init_app(app, db)
     login_mgr.init_app(app)
+    admin.init_app(app)
+
 
 
     @app.shell_context_processor
