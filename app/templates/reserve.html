@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% set msg = 'Sign in first!' %}
+{% if current_user.is_authenticated %}
+    <h1>Welcome to {{hotel['name']}}</h1>
+    <form action="" novalidate method="post">
+        {{form.csrt_token}}
+        {{ form.hidden_tag() }}
+        <div> 
+            {{ form.start.label }}
+            {{ form.start(class="datepicker") }}
+
+            {% for error in form.start.errors %}
+                <small>{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ form.end.label }}
+            {{ form.end(class="datepicker") }}
+
+            {% for error in form.end.errors %}
+                <small>{{ error }}</small>
+            {% endfor %}
+        </div>
+       
+
+        {{ form.submit(class="form-control") }}
+    </form>
+{% else %}
+
+<div class="alert alert-danger" role="alert">
+    {{ msg }}
+</div>
+
+
+{% endif %}
+    
+{% endblock %}

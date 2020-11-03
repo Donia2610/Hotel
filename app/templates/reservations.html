@@ -2,11 +2,39 @@
 
 {% block main %}
     <h1> Your Reservations</h1>
-    {% for reservation in user_reservations %}
+ 
     <br><br>
+    <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col"><Reservation/th>
+            <th scope="col">Hotel</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for reservation in user_reservations %}
+            {% set current_hotel = reservation['hotel_id']%}
+            {% for hotel in hotels %}
+                    {% if current_hotel == hotel['id']%}
+                    {% set hotel_name = hotel['name']%}
+                {% endif %}
+            {% endfor %}
+          <tr>
+            <th scope="row">1</th>
+            <td>{{hotel_name}}</td>
+            <td>{{reservation['start_date'] }}</td>
+            <td>{{reservation['end_date'] }}</td>
+            <td>$$$</td>
+          </tr>
 
-    <h2> {{reservation['start_date'] }} </h2>
-    <h2> {{reservation['end_date'] }} </h2>
+          {% endfor %}
+        </tbody>
+      </table>
 
-    {% endfor %}
+
+
+    
 {% endblock %}

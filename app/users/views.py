@@ -1,6 +1,6 @@
 #https://jamboard.google.com/d/1QkuB6jm7vekd6GwiLoENPpBq_kBgEfMF52uM8pK9Z4g/edit?usp=meet_whiteboard views.py
 import flask, flask_login
-
+from flask import session
 from . import forms
 from app import db, admin
 
@@ -72,7 +72,35 @@ def countries():
 @users.route("/reservations/<user_id>")
 def reservations(user_id):
     user_reservations = Reservation.query.filter_by(user_id=user_id).all()
+    hotels = Hotel.query.all()
     if not user_reservations:
         flask.flash("No reservations found", category="error")
-    return flask.render_template("reservations.html",title ='Your Reservations',user_reservations = user_reservations)
+        return flask.redirect('/')
+    
+    return flask.render_template("reservations.html",title ='Your Reservations',user_reservations = user_reservations,hotels=hotels)
 
+@users.route("/reserve/<hotel_id><user_id>",methods=["GET", "POST"])
+def reserve(hotel_id,user_id):
+    form = forms.ReserveForm()
+
+    if flask.request.method == "POST":
+        if form.validate_on_submit():
+
+            reservation = Reservation()
+            reservation.start_date = form.start.data
+            reservation.end_date = form.end.data
+            reservation.hotel_id = hotel_id
+            reservation.user_id = user_id
+
+            db.session.add(reservation)
+            db.session.commit()
+         
+
+            flask.flash("Your reservation has been successfully registered", category="success")
+
+            return flask.redirect('/')
+        else:
+            print("Form errors:", form.errors)
+
+    hotel = Hotel.query.filter_by(id=hotel_id).first()
+    return flask.render_template("reserve.html", title='Reserve',hotel=hotel,form=form)
