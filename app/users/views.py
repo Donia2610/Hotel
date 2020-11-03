@@ -1,5 +1,6 @@
 #https://jamboard.google.com/d/1QkuB6jm7vekd6GwiLoENPpBq_kBgEfMF52uM8pK9Z4g/edit?usp=meet_whiteboard views.py
 import flask, flask_login
+from flask_login import current_user
 from flask import session
 from . import forms
 from app import db, admin
@@ -17,7 +18,7 @@ admin.add_view(MyModelView(Reservation,db.session))
 @users.route("/", methods=["GET", "POST"])
 @users.route("/home", methods=["GET", "POST"])
 def index():
-    return flask.render_template("index.html", title="My awesome blueprint")
+    return flask.render_template("index.html", title="Dhotels")
 
 @users.route("/sign-up", methods=["GET", "POST"])
 def signup():
@@ -71,18 +72,24 @@ def countries():
 
 @users.route("/reservations/<user_id>")
 def reservations(user_id):
-    user_reservations = Reservation.query.filter_by(user_id=user_id).all()
-    hotels = Hotel.query.all()
-    if not user_reservations:
+    
+
+    reservations_list = Reservation.query\
+        .join(Hotel, Reservation.hotel_id == Hotel.id)\
+        .filter(Reservation.user_id == user_id).all()
+    print([ r.hotel.name for r in reservations_list])
+    if not reservations_list:
         flask.flash("No reservations found", category="error")
         return flask.redirect('/')
     
-    return flask.render_template("reservations.html",title ='Your Reservations',user_reservations = user_reservations,hotels=hotels)
 
-@users.route("/reserve/<hotel_id><user_id>",methods=["GET", "POST"])
-def reserve(hotel_id,user_id):
+
+    return flask.render_template("reservations.html",title ='Your Reservations',user_reservations = reservations_list)
+
+@users.route("/reserve/<hotel_id>",methods=["GET", "POST"])
+def reserve(hotel_id):
     form = forms.ReserveForm()
-
+    print(current_user)
     if flask.request.method == "POST":
         if form.validate_on_submit():
 
@@ -90,7 +97,8 @@ def reserve(hotel_id,user_id):
             reservation.start_date = form.start.data
             reservation.end_date = form.end.data
             reservation.hotel_id = hotel_id
-            reservation.user_id = user_id
+            reservation.user_id = current_user.id
+            
 
             db.session.add(reservation)
             db.session.commit()
