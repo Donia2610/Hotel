@@ -4,6 +4,7 @@
     <h1> Locations </h1>
     {% for hotel in hotel_locations %}
     <br><br>
+    {% set current_id = hotel['id'] %}
 <div>
     <h2> {{hotel['name'] }} </h2>
 <div class="row">
@@ -47,7 +48,15 @@
 <div class="col-sm-2">
 </div>
 <div class="col-sm-4">
-    <h1>Reserve</h1>
+    <br><br>
+    <div style="text-align: center">
+    <img src="https://icon-library.com/images/star-rating-icon/star-rating-icon-21.jpg" width="{{ 300 }}" height="{{ 70 }}"/>
+    <br><br>
+    <h3>Price for night:</h3>
+    <h4 style="color:green">{{hotel['price'] }}$</h4>
+    <br>
+    <a type="button" class="btn btn-secondary btn-lg" href="{{ url_for('users.reserve', hotel_id=current_id, user_id = current_user.id )}}" >Reserve Now</a>
+</div>
 </div>
 </div>
     {% endfor %}

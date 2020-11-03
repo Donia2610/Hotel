@@ -45,6 +45,7 @@ class Hotel(db.Model):
     location = db.Column(db.String(64))
     rooms_number = db.Column(db.Integer)
     reservation = db.relationship('Reservation', backref='hotel', lazy=True)
+    price = db.Column(db.Integer)
     image1 = db.Column(db.String(256))
     image2 = db.Column(db.String(256))
     image3 = db.Column(db.String(256))
@@ -54,8 +55,8 @@ class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
     hotel_id = db.Column(db.Integer, db.ForeignKey('hotel.id'), nullable=False)
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
 
 class  MyModelView(ModelView):
     pass
