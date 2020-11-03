@@ -55,7 +55,8 @@
     <h3>Price for night:</h3>
     <h4 style="color:green">{{hotel['price'] }}$</h4>
     <br>
-    <a type="button" class="btn btn-secondary btn-lg" href="{{ url_for('users.reserve', hotel_id=current_id, user_id = current_user.id )}}" >Reserve Now</a>
+
+    <a type="button" class="btn btn-secondary btn-lg" href="{{ url_for('users.reserve', hotel_id=current_id)}}" >Reserve Now</a>
 </div>
 </div>
 </div>

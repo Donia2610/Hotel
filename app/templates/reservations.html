@@ -7,7 +7,7 @@
     <table class="table">
         <thead class="thead-light">
           <tr>
-            <th scope="col"><Reservation/th>
+            <th scope="col">Reservation</th>
             <th scope="col">Hotel</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
@@ -15,21 +15,18 @@
           </tr>
         </thead>
         <tbody>
+      
         {% for reservation in user_reservations %}
-            {% set current_hotel = reservation['hotel_id']%}
-            {% for hotel in hotels %}
-                    {% if current_hotel == hotel['id']%}
-                    {% set hotel_name = hotel['name']%}
-                {% endif %}
-            {% endfor %}
+          {% set days = reservation.end_date - reservation.start_date %}
+          {% set price_ = days.days * reservation.hotel.price %}
           <tr>
-            <th scope="row">1</th>
-            <td>{{hotel_name}}</td>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{reservation.hotel.name}}</td>
             <td>{{reservation['start_date'] }}</td>
             <td>{{reservation['end_date'] }}</td>
-            <td>$$$</td>
+            <td>{{price_}}$</td>
           </tr>
-
+         
           {% endfor %}
         </tbody>
       </table>

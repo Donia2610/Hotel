@@ -4,6 +4,7 @@ from flask_login import UserMixin, current_user
 import werkzeug
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_admin.contrib.sqla import ModelView
+from flask_admin import AdminIndexView
 
 from . import db
 from .utils import ModelMixin
@@ -14,6 +15,7 @@ class User(UserMixin, db.Model): # SQL Table
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(64))
     _password_hash    = db.Column(db.String(256))
+    is_admin = db.Column(db.Boolean)
     reservation = db.relationship('Reservation', backref='user', lazy=True)
 
     @classmethod
@@ -59,4 +61,15 @@ class Reservation(db.Model):
     end_date = db.Column(db.Date)
 
 class  MyModelView(ModelView):
-    pass
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+
+
+  #  def inaccessible_callback(self, name, **kwargs):
+        #redirect to login page if user doesn't have access
+   #     return redirect(url_for('login', next=request.url))
+
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+     

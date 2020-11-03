@@ -32,7 +32,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_mgr.init_app(app)
-    admin.init_app(app)
+    admin.init_app(app,index_view=models.MyAdminIndexView())
 
 
 
